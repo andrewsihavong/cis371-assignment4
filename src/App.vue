@@ -1,6 +1,7 @@
 <template>
   <div>
     <Beverage :isIced="beverageStore.currentTemp === 'Cold'" />
+
     <ul>
       <li>
         <template v-for="temp in beverageStore.temps" :key="temp">
@@ -8,7 +9,6 @@
             <input
               type="radio"
               name="temperature"
-              :id="`r${temp}`"
               :value="temp"
               v-model="beverageStore.currentTemp"
             />
@@ -16,16 +16,73 @@
           </label>
         </template>
       </li>
-    </ul>
-    <input type="text" placeholder="Beverage Name" />
-    <button>🍺 Make Beverage</button>
-  </div>
-  <div id="beverage-container" style="margin-top: 20px"></div>
-</template>
+      <li>
+        <template v-for="base in beverageStore.bases" :key="base.id">
+          <label>
+            <input
+              type="radio"
+              name="base"
+              :value="base"
+              v-model="beverageStore.currentBase"
+            />
+            {{ base.name }}
+          </label>
+        </template>
+      </li>
 
+      <li>
+        <template v-for="creamer in beverageStore.creamers" :key="creamer.id">
+          <label>
+            <input
+              type="radio"
+              name="creamer"
+              :value="creamer"
+              v-model="beverageStore.currentCreamer"
+            />
+            {{ creamer.name }}
+          </label>
+        </template>
+      </li>
+
+      <li>
+        <template v-for="syrup in beverageStore.syrups" :key="syrup.id">
+          <label>
+            <input
+              type="radio"
+              name="syrup"
+              :value="syrup"
+              v-model="beverageStore.currentSyrup"
+            />
+            {{ syrup.name }}
+          </label>
+        </template>
+      </li>
+    </ul>
+    <input
+      type="text"
+      placeholder="Beverage Name"
+      v-model="beverageStore.beverageName"
+    />
+
+    <button @click="beverageStore.makeBeverage()">
+      🍺 Make Beverage
+    </button>
+  </div>
+
+  <div id="beverage-container" style="margin-top: 20px">
+    <button
+      v-for="beverage in beverageStore.beverages"
+      :key="beverage.name"
+      @click="beverageStore.showBeverage(beverage)"
+    >
+      {{ beverage.name }}
+    </button>
+  </div>
+</template>
 <script setup lang="ts">
 import Beverage from "./components/Beverage.vue";
 import { useBeverageStore } from "./stores/beverageStore";
+
 const beverageStore = useBeverageStore();
 </script>
 
